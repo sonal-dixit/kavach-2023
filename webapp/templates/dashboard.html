@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table id="data" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>Date</th>
+            <th>City</th>
+            <th>Coordinates</th>
+            <th>Level</th>
+            <th>Nature</th>
+            <th>Reported to</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for crime in crimes %}
+        <tr>
+            <td data-sort="{{crime['time']}}">
+                {{ crime['time'].strftime('%H:%M') }}
+            </td>
+            <td>{{ crime['time'].strftime('%Y-%m-%d') }}</td>
+            <td>{{ crime['city'] }}</td>
+            <td>{{ crime['coordinates'] }}</td>
+            <td>{{ crime['level'] }}</td>
+            <td>{{ crime['nature'] }}</td>
+            <td>{{ crime['reported'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+            $('#data').DataTable({
+                    order: [[0, 'desc']],
+                });
+        });
+    if ({{ count }} > localStorage.getItem("num_crimes")) {
+            Swal.fire({
+                title: "New Crime",
+                icon: 'error',
+                iconHtml: '💀'
+                }).then(() => {
+                    setTimeout(function(){
+                        window.location.reload();
+                    }, 5000);
+                })
+    } else {
+        setTimeout(function(){
+            window.location.reload();
+        }, 10000);
+    }
+    localStorage.setItem("num_crimes", {{ count }});
+</script>
+{% endblock %}

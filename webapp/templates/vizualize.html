@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="1300" height="600" src="https://charts.mongodb.com/charts-project-0-fvyky/embed/charts?id=641e2ee4-7649-4801-8362-edd25073d314&maxDataAge=60&theme=light&autoRefresh=true"></iframe>
+<iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="1300" height="600" src="https://charts.mongodb.com/charts-project-0-fvyky/embed/charts?id=641e3015-35ab-49f5-8521-5f0666bc8e40&maxDataAge=60&theme=light&autoRefresh=true"></iframe>
+<div>
+    <h2>City Wise Analysis</h2>
+    <div id="piechart" style="width: 600px; height: 500px; float:left;"></div>
+    <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="640" height="480" src="https://charts.mongodb.com/charts-project-0-fvyky/embed/charts?id=641e2643-2947-48bb-8d4f-d070206a40d7&maxDataAge=60&theme=light&autoRefresh=true"></iframe>
+</div>
+<br>
+<div>
+<h2>Crime Wise Analysis </h2>
+<div id="piechart_crime" style="width: 600px; height: 500px; float:left;"></div>
+<iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="640" height="480" src="https://charts.mongodb.com/charts-project-0-fvyky/embed/charts?id=641e24e7-6162-4f1d-8105-fe711c7a4b50&maxDataAge=60&theme=light&autoRefresh=true"></iframe>
+</div>
+<br>
+<div>
+<h2>Overall Analysis</h2>
+<iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="640" height="480" src="https://charts.mongodb.com/charts-project-0-fvyky/embed/charts?id=641e2475-96b5-48ae-80f4-3dd9a7d7e1df&maxDataAge=60&theme=light&autoRefresh=true"></iframe>
+<iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="640" height="480" src="https://charts.mongodb.com/charts-project-0-fvyky/embed/charts?id=641e2ad9-b034-4275-858d-d93118348820&maxDataAge=60&theme=light&autoRefresh=true"></iframe>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['City', 'Number of Crimes'],
+            {% for k in cnt %}
+            ['{{ k[0] }}', {{ k[1] }}],
+            {% endfor %}
+        ]);
+
+        var options = {
+          title: '5 most unsafe cities'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+
+        var data_crime = google.visualization.arrayToDataTable([
+            ['Nature of Crime', 'Number of Crimes'],
+            {% for k in cnt_crime %}
+            ['{{ k[0] }}', {{ k[1] }}],
+            {% endfor %}
+        ]);
+
+        var options_crime = {
+          title: '5 most common crimes'
+        };
+        var chart_crime = new google.visualization.PieChart(document.getElementById('piechart_crime'));
+        chart_crime.draw(data_crime, options_crime);
+  }
+</script>
+{% endblock %}
